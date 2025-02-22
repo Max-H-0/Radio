@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
 using MelonLoader;
 using UnityEngine;
 using Ship.Interface.Settings;
@@ -8,16 +9,23 @@ using Ship.Interface.Model.Parts;
 using Ship.Parts.Common;
 using Ship.Interface.Model;
 using Ship.Interface.Model.Parts.StateTypes;
+using Core.Sounds;
 
 using Object = UnityEngine.Object;
+using UnityEngine.Audio;
 
 namespace Radio;
 
 public class RadioMod : MelonMod
 {
     public static MelonPreferences_Category PreferenceCategory { get; set; } = MelonPreferences.CreateCategory("RadioMod");
+    public static MelonPreferences_Entry<float> Volume { get; set; } = PreferenceCategory.CreateEntry("Volume", 1f);
     public static MelonPreferences_Entry<ushort> PartID { get; set; } = PreferenceCategory.CreateEntry<ushort>("PartID", 0b_10000000_00000001);
- 
+
+
+    public static SoundParams FlickSoundParams;
+    public static List<SoundParams> MusicParams = new();
+
 
     public static AssetLoader? AssetLoader { get; set; }
     public static EventHandler? OnCreatedAssetLoader;
@@ -38,6 +46,16 @@ public class RadioMod : MelonMod
             Keys.FieryEnd
         ]);
         OnCreatedAssetLoader?.Invoke(this, EventArgs.Empty);
+
+        foreach (var g in Resources.FindObjectsOfTypeAll<AudioMixerGroup>()) MelonLogger.Msg(g.name);
+
+        var music = ScriptableObject.CreateInstance<SoundParams>();
+        music.audioClip = AssetLoader.GetAsset<AudioClip>(Keys.FieryEnd);
+        music.audioMixerGroup = Resources.FindObjectsOfTypeAll<AudioMixerGroup>().First(g => g.name == "Music");
+        music.volume = Volume.Value;
+        music.loop = true;
+
+        MusicParams.Add(music);
     }
 
 
@@ -50,6 +68,7 @@ public class RadioMod : MelonMod
             return;
         }
 
+        FlickSoundParams = Resources.FindObjectsOfTypeAll<SoundParams>().First(p => p.name == "Flicking");
         CreatePart();
     }
 
@@ -77,6 +96,7 @@ public class RadioMod : MelonMod
         part.id = PartID.Value;
         part.buildingCost = [];
         part.part = CreateRadio();
+        part.mass = 10;
 
         Utilities.AddPart(part);
     }
@@ -104,6 +124,7 @@ public class RadioMod : MelonMod
 
         GameObject visuals = new("Visuals");
         visuals.AddComponent<RadioVisuals>();
+        visuals.AddComponent<SoundSource>();
         visuals.transform.parent = part.transform;
 
 

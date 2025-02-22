@@ -17,7 +17,11 @@
   <ItemGroup>
     <Reference Include="ReferencedAssemblies\MelonLoader.dll" />
     <Reference Include="ReferencedAssemblies\UnityEngine.CoreModule.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.PhysicsModule.dll" />
     <Reference Include="ReferencedAssemblies\UnityEngine.AssetBundleModule.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.AnimationModule.dll" />
+    <Reference Include="ReferencedAssemblies\UnityEngine.AudioModule.dll" />
+    <Reference Include="ReferencedAssemblies\Core.dll" />
     <Reference Include="ReferencedAssemblies\Ship.dll" />
     <Reference Include="ReferencedAssemblies\Ship.Interface.dll" />
     <Reference Include="ReferencedAssemblies\Items.Interface.dll" />
@@ -25,7 +29,6 @@
     <Reference Include="ReferencedAssemblies\UI.Interface.dll" />
     <Reference Include="ReferencedAssemblies\Player.dll" />
     <Reference Include="ReferencedAssemblies\Player.Interface.dll" />
-    <Reference Include="ReferencedAssemblies\UnityEngine.PhysicsModule.dll" />
     <Reference Include="ReferencedAssemblies\0Harmony.dll" />
     <Reference Include="ReferencedAssemblies\Assembly-CSharp.dll" />
     <Reference Include="ReferencedAssemblies\Managers.Interface.dll" />
